@@ -638,6 +638,10 @@ int main ( void )
         bool firstTime = true;
         // Total points should be 50 to match the lab question
         // uint32_t numPtsPerFunc = 10; 
+        // Some of the functions pass many test cases even if there's
+        // little or no asm code in the student file.
+        // The weights were chosen so that the functions that pass even
+        // wih little or no asm code have a lower weighting.
         uint32_t unpackPts, absPts, multPts, fsPts, mainPts, totalPts;
         uint32_t unpackWt = 12; // point weighting for unpack tests
         uint32_t absWt    = 12; // point weighting for unpack tests
@@ -665,20 +669,20 @@ int main ( void )
             {
                 snprintf((char*)uartTxBuffer, MAX_PRINT_LEN,
                     "========= %s: Functions Lab ALL TESTS COMPLETE: Post-test Idle Cycle Number: %ld\r\n"
-                    "Summary of tests: asmUnpack:  %ld of %ld tests passed; %ld pts\r\n"
-                    "Summary of tests: asmAbs:     %ld of %ld tests passed; %ld pts\r\n"
-                    "Summary of tests: asmMult:    %ld of %ld tests passed; %ld pts\r\n"
-                    "Summary of tests: asmFixSign: %ld of %ld tests passed; %ld pts\r\n"
-                    "Summary of tests: asmMain:    %ld of %ld tests passed; %ld pts\r\n"
-                    "%s: Final score, all tests: %ld/%ld\r\n"
+                    "Summary of tests: asmUnpack:  %ld of %ld tests passed; %ld/%ld pts\r\n"
+                    "Summary of tests: asmAbs:     %ld of %ld tests passed; %ld/%ld pts\r\n"
+                    "Summary of tests: asmMult:    %ld of %ld tests passed; %ld/%ld pts\r\n"
+                    "Summary of tests: asmFixSign: %ld of %ld tests passed; %ld/%ld pts\r\n"
+                    "Summary of tests: asmMain:    %ld of %ld tests passed; %ld/%ld pts\r\n"
+                    "%s: Final score, all tests: %ld/%ld pts\r\n"
                     "FINI!!!!!\r\n"
                     "\r\n",
                     (char *) nameStrPtr, idleCount, 
-                    unpackTotalPassCount, unpackTotalTests, unpackPts,
-                    absTotalPassCount, absTotalTests, absPts,
-                    multTotalPassCount, multTotalTests, multPts,
-                    fsTotalPassCount, fsTotalTests, fsPts,
-                    mainTotalPassCount, mainTotalTests, mainPts,
+                    unpackTotalPassCount, unpackTotalTests, unpackPts, unpackWt,
+                    absTotalPassCount, absTotalTests, absPts, absWt,
+                    multTotalPassCount, multTotalTests, multPts, multWt,
+                    fsTotalPassCount, fsTotalTests, fsPts, fsWt,
+                    mainTotalPassCount, mainTotalTests, mainPts, mainWt,
                     (char *) nameStrPtr, totalPts, totalPtsPossible
                     ); 
             }
