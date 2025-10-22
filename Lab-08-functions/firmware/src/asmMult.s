@@ -19,7 +19,7 @@
 .type nameStr,%gnu_unique_object
     
 /*** STUDENTS: Change the next line to your name!  **/
-nameStr: .asciz "Inigo Montoya"  
+nameStr: .asciz "Ben Phan"  
 
 .align   /* realign so that next mem allocations are on word boundaries */
  
@@ -84,6 +84,15 @@ final_Product:   .word     0
 asmUnpack:   
     
     /*** STUDENTS: Place your asmUnpack code BELOW this line!!! **************/
+        PUSH {LR}   /* not touching R4-R11*/
+            ASR     R3, R0, 16
+            STR     R3, [R1]    /*R1, R2 stores address, not the actual values*/
+
+            LSL     R3, R0, 16
+            ASR     R3, R3, 16
+            STR     R3, [R2]
+        POP {PC} /* return to the base of stack frame(mainFunc instead of asmUnpack)
+
     
     /*** STUDENTS: Place your asmUnpack code ABOVE this line!!! **************/
 
@@ -165,12 +174,14 @@ asmFixSign:
 asmMain:   
     
     /*** STUDENTS: Place your asmMain code BELOW this line!!! **************/
-    
+    PUSH {R4-R11, LR}
     /* Step 1:
      * call asmUnpack. Have it store the output values in a_Multiplicand
      * and b_Multiplier.
      */
-
+    LDR     R1, =a_Multiplicand     /*ADDRESS*/
+    LDR     R2, =b_Multiplier
+    BL      asmUnpack
 
      /* Step 2a:
       * call asmAbs for the multiplicand (a). Have it store the absolute value
@@ -212,7 +223,7 @@ asmMain:
       */
 
 
-    
+    POP {R4-R11, LR}
     /*** STUDENTS: Place your asmMain code ABOVE this line!!! **************/
 
 
