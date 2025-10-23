@@ -92,8 +92,6 @@ asmUnpack:
             ASR     R3, R3, 16
             STR     R3, [R2]
         POP {PC} /* return to the base of stack frame(mainFunc instead of asmUnpack)
-
-    
     /*** STUDENTS: Place your asmUnpack code ABOVE this line!!! **************/
 
 
@@ -109,10 +107,22 @@ asmUnpack:
  *                      store sign bit in location given by r2
  */    
 asmAbs:  
-
     /*** STUDENTS: Place your asmAbs code BELOW this line!!! **************/
-    
+    PUSH {LR}
+        CMP     R0, 0
+        BGE     pos_val
 
+        RSB    R0, R0, 0   /* no need flags */
+        LDR     R3, =1
+        STR     R3, [R2]
+        B       store_abs
+
+        pos_val:
+            LDR     R3, =0
+            STR     R3, [R2]
+        store_abs:
+            STR     R0, [R1]
+    POP {PC}
     /*** STUDENTS: Place your asmAbs code ABOVE this line!!! **************/
 
 
@@ -127,8 +137,42 @@ asmAbs:
 asmMult:   
 
     /*** STUDENTS: Place your asmMult code BELOW this line!!! **************/
+    PUSH {LR}
+        /* if either multiplicand/er == 0 -> product == 0*/
+        CMP     R0, 0           /*R0, R1 already hold values*/
+        BEQ     Prod_Zebra
+        CMP     R1, 0
+        BEQ     Prod_Zebra
 
+        B       Prod_Normal
 
+        Prod_Zebra: /*set final prod, signs = 0*/
+            MOV     R3, 0
+            LDR     R4, =final_Product
+            LDR     R5, =b_Sign
+            LDR     R6, =a_Sign
+            STR     R3, [R4]
+            STR     R3, [R5]
+            STR     R3, [R6]
+            B       Done
+
+        Prod_Normal:
+            MOV     R3, 0
+
+        Mult_Loop:
+            CMP     R1, 0
+            BEQ     Done            /* Multiplier == 0*/
+
+            TST     R1, 1           /*if rightmost bit == 1*/
+            ADDNE   R3, R3, R0      /*Add multiplier to cand*/
+
+            LSL     R0, R0, 1       /* a << 1, b >> 1*/
+            LSR     R1, R1, 1
+            B      Mult_Loop
+
+        Done:
+            MOV     R0, R3
+    POP {PC}
     /*** STUDENTS: Place your asmMult code ABOVE this line!!! **************/
 
    
@@ -149,8 +193,9 @@ asmMult:
 asmFixSign:   
     
     /*** STUDENTS: Place your asmFixSign code BELOW this line!!! **************/
-
+    PUSH {LR}
     
+    POP {PC}
     /*** STUDENTS: Place your asmFixSign code ABOVE this line!!! **************/
 
 
@@ -178,6 +223,8 @@ asmMain:
     /* Step 1:
      * call asmUnpack. Have it store the output values in a_Multiplicand
      * and b_Multiplier.
+
+        asmUnpack(initval, adr a, of b)
      */
     LDR     R1, =a_Multiplicand     /*ADDRESS*/
     LDR     R2, =b_Multiplier
@@ -186,15 +233,25 @@ asmMain:
      /* Step 2a:
       * call asmAbs for the multiplicand (a). Have it store the absolute value
       * in a_Abs, and the sign in a_Sign.
-      */
 
+      asmAbs(val, adr |val|, adr val's sign)
+      */
+    LDR     R0, =a_Multiplicand     /*load a's address*/
+    LDR     R0, [R0]                /*load a*/
+    LDR     R1, =a_Abs              /*adress*/
+    LDR     R2, =a_Sign
+    BL      asmAbs
 
 
      /* Step 2b:
       * call asmAbs for the multiplier (b). Have it store the absolute value
       * in b_Abs, and the sign in b_Sign.
       */
-
+    LDR     R0, =b_Multiplier
+    LDR     R0, [R0]
+    LDR     R1, =b_Abs
+    LDR     R2, =b_Sign
+    BL      asmAbs
 
 
     /* Step 3:
@@ -203,8 +260,15 @@ asmMain:
      * asmMult returns the initial (positive) product in r0.
      * In this function (asmMain), store the output value  
      * returned asmMult in r0 to mem location init_Product.
+
+     asmMult(a, b)
      */
 
+    LDR     R0, =a_Abs
+    LDR     R0, [R0]
+    LDR     R1, =b_Abs
+    LDR     R1, [R1]
+    BL      asmMult
 
     /* Step 4:
      * call asmFixSign. Pass in the initial product, and the
@@ -212,8 +276,16 @@ asmMain:
      * asmFixSign returns the final product with the correct
      * sign. Store the value returned in r0 to mem location 
      * final_Product.
-     */
 
+     asmFixSign(prod, a_Sign, b_Sign)
+     */
+    LDR     R0, =init_Product
+    LDR     R0, [R0]
+    LDR     R1, =a_Sign
+    LDR     R1, [R1]
+    LDR     R2, =b_Sign
+    LDR     R2, [R2]
+    BL      asmFixSign
 
      /* Step 5:
       * END! Return to caller. Make sure of the following:
