@@ -82,7 +82,6 @@ final_Product:   .word     0
  *                     specified by r2
  */
 asmUnpack:   
-    
     /*** STUDENTS: Place your asmUnpack code BELOW this line!!! **************/
         PUSH {LR}   /* not touching R4-R11*/
             ASR     R3, R0, 16
@@ -112,13 +111,13 @@ asmAbs:
         CMP     R0, 0
         BGE     pos_val
 
-        RSB    R0, R0, 0   /* no need flags */
-        LDR     R3, =1
+        RSB     R0, R0, 0   /* no need flags */
+        MOV     R3, 1
         STR     R3, [R2]
         B       store_abs
 
         pos_val:
-            LDR     R3, =0
+            MOV     R3, 0
             STR     R3, [R2]
         store_abs:
             STR     R0, [R1]
@@ -134,8 +133,7 @@ asmAbs:
  *              r1: contains abs value of multiplier (b)
  *    outputs:  r0: initial product: r0 * r1
  */ 
-asmMult:   
-
+asmMult:
     /*** STUDENTS: Place your asmMult code BELOW this line!!! **************/
     PUSH {LR}
         /* if either multiplicand/er == 0 -> product == 0*/
@@ -149,11 +147,13 @@ asmMult:
         Prod_Zebra: /*set final prod, signs = 0*/
             MOV     R3, 0
             LDR     R4, =final_Product
+            STR     R3, [R4]
+            /* SHOULD NOT FIDDLE WITH SIGNS
             LDR     R5, =b_Sign
             LDR     R6, =a_Sign
-            STR     R3, [R4]
             STR     R3, [R5]
             STR     R3, [R6]
+            */
             B       Done
 
         Prod_Normal:
@@ -172,6 +172,8 @@ asmMult:
 
         Done:
             MOV     R0, R3
+            LDR     R4, =init_Product
+            STR     R0, [R4]
     POP {PC}
     /*** STUDENTS: Place your asmMult code ABOVE this line!!! **************/
 
@@ -193,8 +195,14 @@ asmMult:
 asmFixSign:   
     
     /*** STUDENTS: Place your asmFixSign code BELOW this line!!! **************/
-    PUSH {LR}
-    
+    PUSH {LR} /*every values loaded*/
+        EOR     R3, R1, R2      /*Neg if diff*/
+        CMP     R3, 1
+        BNE     Send_Prod
+
+        RSB     R0, R0, 0       /*not using SUBS since 1st operand must be a register*/
+
+        Send_Prod:
     POP {PC}
     /*** STUDENTS: Place your asmFixSign code ABOVE this line!!! **************/
 
@@ -287,6 +295,8 @@ asmMain:
     LDR     R2, [R2]
     BL      asmFixSign
 
+    LDR     R4, =final_Product
+    STR     R0, [R4]
      /* Step 5:
       * END! Return to caller. Make sure of the following:
       * 1) Stack has been correctly managed.
@@ -295,7 +305,7 @@ asmMain:
       */
 
 
-    POP {R4-R11, LR}
+    POP {R4-R11, PC}        /*return PC instead of LR to keep R0*/
     /*** STUDENTS: Place your asmMain code ABOVE this line!!! **************/
 
 
