@@ -1,12 +1,7 @@
 /*** asmMult.s   ***/
-/* SOLUTION; used to test C test harness
- * VB 10/14/2023
- */
     
 /* Tell the assembler to allow both 16b and 32b extended Thumb instructions */
 .syntax unified
-
-#include <xc.h>
 
 /* Tell the assembler that what follows is in data memory    */
 .data
@@ -83,6 +78,8 @@ final_Product:   .word     0
  */
 asmUnpack:   
     
+    /*** REMEMBER: You MUST use the ARM calling convention as described in the lectures! ***/
+
     /*** STUDENTS: Place your asmUnpack code BELOW this line!!! **************/
     
     /*** STUDENTS: Place your asmUnpack code ABOVE this line!!! **************/
@@ -101,6 +98,8 @@ asmUnpack:
  */    
 asmAbs:  
 
+    /*** REMEMBER: You MUST use the ARM calling convention as described in the lectures! ***/
+
     /*** STUDENTS: Place your asmAbs code BELOW this line!!! **************/
     
 
@@ -116,6 +115,8 @@ asmAbs:
  *    outputs:  r0: initial product: r0 * r1
  */ 
 asmMult:   
+
+    /*** REMEMBER: You MUST use the ARM calling convention as described in the lectures! ***/
 
     /*** STUDENTS: Place your asmMult code BELOW this line!!! **************/
 
@@ -139,6 +140,8 @@ asmMult:
  */ 
 asmFixSign:   
     
+    /*** REMEMBER: You MUST use the ARM calling convention as described in the lectures! ***/
+
     /*** STUDENTS: Place your asmFixSign code BELOW this line!!! **************/
 
     
@@ -164,6 +167,8 @@ asmFixSign:
  */  
 asmMain:   
     
+    /*** REMEMBER: You MUST use the ARM calling convention as described in the lectures! ***/
+
     /*** STUDENTS: Place your asmMain code BELOW this line!!! **************/
     
     /* Step 1:
