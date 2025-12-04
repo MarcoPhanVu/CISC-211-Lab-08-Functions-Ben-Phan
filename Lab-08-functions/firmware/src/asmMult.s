@@ -90,8 +90,8 @@ asmUnpack:
             LSL     R3, R0, 16
             ASR     R3, R3, 16
             STR     R3, [R2]
-        POP {R4 - R11, PC}
-        BX LR /* return to the base of stack frame(mainFunc instead of asmUnpack)
+        POP {R4 - R11, LR}
+        BX LR
     /*** STUDENTS: Place your asmUnpack code ABOVE this line!!! **************/
 
 
@@ -122,7 +122,9 @@ asmAbs:
             STR     R3, [R2]
         store_abs:
             STR     R0, [R1]
-    POP {R4 - R11, PC} /*POP PC will be equivalent to POP LR + BX LR*/
+            
+    POP {R4 - R11, LR}
+    BX LR
     /*** STUDENTS: Place your asmAbs code ABOVE this line!!! **************/
 
 
@@ -175,7 +177,8 @@ asmMult:
             MOV     R0, R3
             LDR     R4, =init_Product
             STR     R0, [R4]
-    POP {R4 - R11, PC}
+    POP {R4 - R11, LR}
+    BX LR
     /*** STUDENTS: Place your asmMult code ABOVE this line!!! **************/
 
    
@@ -204,7 +207,8 @@ asmFixSign:
         RSB     R0, R0, 0       /*not using SUBS since 1st operand must be a register*/
 
         Send_Prod:
-    POP {R4 - R11, PC}
+    POP {R4 - R11, LR}
+    BX LR
     /*** STUDENTS: Place your asmFixSign code ABOVE this line!!! **************/
 
 
@@ -306,7 +310,8 @@ asmMain:
       */
 
 
-    POP {R4-R11, PC}        /*return PC instead of LR to keep R0*/
+    POP {R4-R11, LR}
+    BX LR        /*return PC instead of LR to keep R0*/
     /*** STUDENTS: Place your asmMain code ABOVE this line!!! **************/
 
 
