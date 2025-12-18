@@ -42,3 +42,4 @@
 *.c~
 /Lab-08-functions/firmware/Lab-08-func-starter.X/dist/
 /Lab-08-functions/firmware/Lab-08-func-starter.X/build/
+*.un~

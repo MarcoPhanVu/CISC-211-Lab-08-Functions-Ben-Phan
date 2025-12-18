@@ -1,12 +1,7 @@
 /*** asmMult.s   ***/
-/* SOLUTION; used to test C test harness
- * VB 10/14/2023
- */
     
 /* Tell the assembler to allow both 16b and 32b extended Thumb instructions */
 .syntax unified
-
-#include <xc.h>
 
 /* Tell the assembler that what follows is in data memory    */
 .data
@@ -82,6 +77,9 @@ final_Product:   .word     0
  *                     specified by r2
  */
 asmUnpack:   
+    
+    /*** REMEMBER: You MUST use the ARM calling convention as described in the lectures! ***/
+
     /*** STUDENTS: Place your asmUnpack code BELOW this line!!! **************/
         PUSH {R4 - R11, LR}   /* not touching R4-R11*/
             ASR     R3, R0, 16
@@ -107,6 +105,9 @@ asmUnpack:
  *                      store sign bit in location given by r2
  */    
 asmAbs:  
+
+    /*** REMEMBER: You MUST use the ARM calling convention as described in the lectures! ***/
+
     /*** STUDENTS: Place your asmAbs code BELOW this line!!! **************/
     PUSH {R4 - R11, LR}
         CMP     R0, 0
@@ -137,6 +138,10 @@ asmAbs:
  *    outputs:  r0: initial product: r0 * r1
  */ 
 asmMult:
+asmMult:   
+
+    /*** REMEMBER: You MUST use the ARM calling convention as described in the lectures! ***/
+
     /*** STUDENTS: Place your asmMult code BELOW this line!!! **************/
     PUSH {R4 - R11, LR}
         /* if either multiplicand/er == 0 -> product == 0*/
@@ -198,6 +203,8 @@ asmMult:
  */ 
 asmFixSign:   
     
+    /*** REMEMBER: You MUST use the ARM calling convention as described in the lectures! ***/
+
     /*** STUDENTS: Place your asmFixSign code BELOW this line!!! **************/
     PUSH {R4 - R11, LR} /*every values loaded*/
         EOR     R3, R1, R2      /*Neg if diff*/
@@ -231,6 +238,8 @@ asmFixSign:
  */  
 asmMain:   
     
+    /*** REMEMBER: You MUST use the ARM calling convention as described in the lectures! ***/
+
     /*** STUDENTS: Place your asmMain code BELOW this line!!! **************/
     PUSH {R4-R11, LR}
     /* Step 1:
